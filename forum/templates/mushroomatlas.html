@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mushroom Atlas</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .mushroom-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #f9f9f9;
+        }
+        .mushroom-card h3 {
+            margin: 0 0 8px 0;
+        }
+        .mushroom-card ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .mushroom-card ul li {
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mushroom Atlas</h1>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search by name..." onkeyup="filterMushrooms()">
+    </div>
+    <div id="mushroom-list"></div>
+
+    <script>
+        let mushrooms = [];
+
+        fetch('/mushrooms.json')
+            .then(response => response.json())
+            .then(data => {
+                mushrooms = data;
+                displayMushrooms(mushrooms);
+            })
+            .catch(error => console.error('Error fetching mushrooms:', error));
+
+        function displayMushrooms(mushrooms) {
+            const mushroomList = document.getElementById('mushroom-list');
+            mushroomList.innerHTML = '';
+            mushrooms.slice(0, 10).forEach(mushroom => {
+                const card = document.createElement('div');
+                card.className = 'mushroom-card';
+                card.innerHTML = createMushroomHTML(mushroom);
+                mushroomList.appendChild(card);
+            });
+        }
+
+        function createMushroomHTML(mushroom) {
+            return `
+                <h3>${mushroom.latin}</h3>
+                <ul>
+                    <li><strong>Common Names:</strong> ${mushroom.common.join(', ')}</li>
+                    <li><strong>Confused With:</strong> ${mushroom.confusedWith.join(', ')}</li>
+                    <li><strong>Regions:</strong> ${mushroom.regions.join(', ')}</li>
+                    <li><strong>Habitat:</strong> ${mushroom.habitat}</li>
+                    <li><strong>Fairy Rings:</strong> ${mushroom.fairyRings ? 'Yes' : 'No'}</li>
+                    <li><strong>Attributes:</strong><br>
+                        ${Object.entries(mushroom.attributes).map(([key, value]) => `
+                            &emsp;<strong>${capitalize(key)}:</strong> ${Array.isArray(value) ? value.join(', ') : value ? 'Yes' : 'No'}
+                        `).join('<br>')}
+                    </li>
+                </ul>
+            `;
+        }
+
+        function capitalize(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function filterMushrooms() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const filteredMushrooms = mushrooms.filter(mushroom => 
+                mushroom.latin.toLowerCase().includes(query) ||
+                mushroom.common.some(name => name.toLowerCase().includes(query))
+            );
+            displayMushrooms(filteredMushrooms);
+        }
+    </script>
+</body>
+</html>
