@@ -149,6 +149,20 @@ def delete_mushroom(mushroom_id):
     save_mushrooms(mushrooms)
     return '', 204
 
+@app.route('/mushrooms', methods=['GET'])
+def search_mushrooms():
+    pattern = request.args.get('pattern')
+    
+    if not pattern:
+        return jsonify({"error": "Pattern parameter is required"}), 400
+
+    mushrooms = load_mushrooms()
+    
+    filtered_mushrooms = [m for m in mushrooms if pattern.lower() in m["latin"].lower()]
+
+    return jsonify(filtered_mushrooms)
+
+
 # MQTT API do publikowania lokalizacji grzybów
 @app.route("/add_mushroom", methods=["POST"])
 def mqtt_add_mushroom():
