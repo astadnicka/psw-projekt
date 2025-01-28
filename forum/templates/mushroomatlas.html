@@ -1,94 +1,251 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mushroom Atlas</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
         }
-        .search-container {
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 36px;
+        }
+        h2 {
+            color: #34495e;
             margin-bottom: 20px;
         }
-        .mushroom-card {
-            border: 1px solid #ccc;
+        .form-container, #edit-form-container {
+            background-color: #fff;
+            padding: 20px;
             border-radius: 8px;
-            padding: 16px;
-            margin: 16px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        .form-container input, .form-container button,
+        #edit-form-container input, #edit-form-container button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .form-container input[type="checkbox"], 
+        #edit-form-container input[type="checkbox"] {
+            width: auto;
+        }
+        button {
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .mushroom-card {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .mushroom-card h3 {
-            margin: 0 0 8px 0;
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 24px;
         }
         .mushroom-card ul {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
         }
-        .mushroom-card ul li {
-            margin-bottom: 4px;
+        .mushroom-card li {
+            margin-bottom: 8px;
+            color: #7f8c8d;
+        }
+        .mushroom-card button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            margin-right: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .mushroom-card button:hover {
+            background-color: #c0392b;
+        }
+        #edit-form-container {
+            display: none;
+        }
+        .form-container label {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Mushroom Atlas</h1>
-    <div class="search-container">
-        <input type="text" id="search" placeholder="Search by name..." onkeyup="filterMushrooms()">
+    <div class="container">
+        <h1>Mushroom Atlas</h1>
+
+        <div class="form-container">
+            <h2>Add a New Mushroom</h2>
+            <form id="add-mushroom-form">
+                <input type="text" id="latin" placeholder="Latin Name" required>
+                <input type="text" id="common" placeholder="Common Names (comma-separated)" required>
+                <input type="text" id="confusedWith" placeholder="Confused With (comma-separated)" required>
+                <input type="text" id="regions" placeholder="Regions (comma-separated)" required>
+                <input type="text" id="habitat" placeholder="Habitat" required>
+                <label>
+                    Fairy Rings:
+                    <input type="checkbox" id="fairyRings">
+                </label>
+                <button type="submit">Add Mushroom</button>
+            </form>
+        </div>
+
+        <div id="mushroom-list"></div>
+
+        <div id="edit-form-container">
+            <h2>Edit Mushroom</h2>
+            <form id="edit-mushroom-form">
+                <input type="hidden" id="edit-id">
+                <input type="text" id="edit-latin" placeholder="Latin Name" required>
+                <input type="text" id="edit-common" placeholder="Common Names (comma-separated)" required>
+                <input type="text" id="edit-confusedWith" placeholder="Confused With (comma-separated)" required>
+                <input type="text" id="edit-regions" placeholder="Regions (comma-separated)" required>
+                <input type="text" id="edit-habitat" placeholder="Habitat" required>
+                <label>
+                    Fairy Rings:
+                    <input type="checkbox" id="edit-fairyRings">
+                </label>
+                <button type="submit">Save Changes</button>
+                <button type="button" onclick="cancelEdit()">Cancel</button>
+            </form>
+        </div>
     </div>
-    <div id="mushroom-list"></div>
 
     <script>
-        let mushrooms = [];
-
-        fetch('/mushrooms.json')
-            .then(response => response.json())
-            .then(data => {
-                mushrooms = data;
-                displayMushrooms(mushrooms);
-            })
-            .catch(error => console.error('Error fetching mushrooms:', error));
+        function fetchMushrooms() {
+            fetch('/mushrooms.json')
+                .then(response => response.json())
+                .then(data => displayMushrooms(data))
+                .catch(error => console.error('Error fetching mushrooms:', error));
+        }
 
         function displayMushrooms(mushrooms) {
             const mushroomList = document.getElementById('mushroom-list');
             mushroomList.innerHTML = '';
-            mushrooms.slice(0, 10).forEach(mushroom => {
+            mushrooms.forEach(mushroom => {
                 const card = document.createElement('div');
                 card.className = 'mushroom-card';
-                card.innerHTML = createMushroomHTML(mushroom);
+                card.innerHTML = `
+                    <h3>${mushroom.latin}</h3>
+                    <ul>
+                        <li><strong>Common Names:</strong> ${mushroom.common.join(', ')}</li>
+                        <li><strong>Confused With:</strong> ${mushroom.confusedWith.join(', ')}</li>
+                        <li><strong>Regions:</strong> ${mushroom.regions.join(', ')}</li>
+                        <li><strong>Habitat:</strong> ${mushroom.habitat}</li>
+                        <li><strong>Fairy Rings:</strong> ${mushroom.fairyRings ? 'Yes' : 'No'}</li>
+                    </ul>
+                    <button onclick="editMushroom(${mushroom.id})">Edit</button>
+                    <button onclick="deleteMushroom(${mushroom.id})">Delete</button>
+                `;
                 mushroomList.appendChild(card);
             });
         }
 
-        function createMushroomHTML(mushroom) {
-            return `
-                <h3>${mushroom.latin}</h3>
-                <ul>
-                    <li><strong>Common Names:</strong> ${mushroom.common.join(', ')}</li>
-                    <li><strong>Confused With:</strong> ${mushroom.confusedWith.join(', ')}</li>
-                    <li><strong>Regions:</strong> ${mushroom.regions.join(', ')}</li>
-                    <li><strong>Habitat:</strong> ${mushroom.habitat}</li>
-                    <li><strong>Fairy Rings:</strong> ${mushroom.fairyRings ? 'Yes' : 'No'}</li>
-                    <li><strong>Attributes:</strong><br>
-                        ${Object.entries(mushroom.attributes).map(([key, value]) => `
-                            &emsp;<strong>${capitalize(key)}:</strong> ${Array.isArray(value) ? value.join(', ') : value ? 'Yes' : 'No'}
-                        `).join('<br>')}
-                    </li>
-                </ul>
-            `;
+        document.getElementById('add-mushroom-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const mushroom = {
+                latin: document.getElementById('latin').value,
+                common: document.getElementById('common').value.split(',').map(s => s.trim()),
+                confusedWith: document.getElementById('confusedWith').value.split(',').map(s => s.trim()),
+                regions: document.getElementById('regions').value.split(',').map(s => s.trim()),
+                habitat: document.getElementById('habitat').value,
+                fairyRings: document.getElementById('fairyRings').checked
+            };
+            fetch('/mushroom', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(mushroom)
+            })
+                .then(response => response.json())
+                .then(() => {
+                    fetchMushrooms();
+                    this.reset();
+                })
+                .catch(error => console.error('Error adding mushroom:', error));
+        });
+
+        function editMushroom(id) {
+            fetch(`/mushroom/${id}`)
+                .then(response => response.json())
+                .then(mushroom => {
+                    document.getElementById('edit-id').value = mushroom.id;
+                    document.getElementById('edit-latin').value = mushroom.latin;
+                    document.getElementById('edit-common').value = mushroom.common.join(', ');
+                    document.getElementById('edit-confusedWith').value = mushroom.confusedWith.join(', ');
+                    document.getElementById('edit-regions').value = mushroom.regions.join(', ');
+                    document.getElementById('edit-habitat').value = mushroom.habitat;
+                    document.getElementById('edit-fairyRings').checked = mushroom.fairyRings;
+
+                    document.getElementById('edit-form-container').style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching mushroom details:', error));
         }
 
-        function capitalize(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
+        document.getElementById('edit-mushroom-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const mushroom = {
+                latin: document.getElementById('edit-latin').value,
+                common: document.getElementById('edit-common').value.split(',').map(s => s.trim()),
+                confusedWith: document.getElementById('edit-confusedWith').value.split(',').map(s => s.trim()),
+                regions: document.getElementById('edit-regions').value.split(',').map(s => s.trim()),
+                habitat: document.getElementById('edit-habitat').value,
+                fairyRings: document.getElementById('edit-fairyRings').checked
+            };
+            const id = document.getElementById('edit-id').value;
+
+            fetch(`/mushroom/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(mushroom)
+            })
+                .then(response => response.json())
+                .then(() => {
+                    fetchMushrooms();
+                    cancelEdit();
+                })
+                .catch(error => console.error('Error updating mushroom:', error));
+        });
+
+        function cancelEdit() {
+            document.getElementById('edit-form-container').style.display = 'none';
         }
 
-        function filterMushrooms() {
-            const query = document.getElementById('search').value.toLowerCase();
-            const filteredMushrooms = mushrooms.filter(mushroom => 
-                mushroom.latin.toLowerCase().includes(query) ||
-                mushroom.common.some(name => name.toLowerCase().includes(query))
-            );
-            displayMushrooms(filteredMushrooms);
+        function deleteMushroom(id) {
+            if (confirm("Are you sure you want to delete this mushroom?")) {
+                fetch(`/mushroom/${id}`, { method: 'DELETE' })
+                    .then(() => fetchMushrooms())
+                    .catch(error => console.error('Error deleting mushroom:', error));
+            }
         }
+
+        fetchMushrooms();
     </script>
 </body>
 </html>

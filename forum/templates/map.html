@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mushroom Map</title>
+    <script src="https://cdn.jsdelivr.net/npm/paho-mqtt/mqttws31.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <style>
+        /* Ogólne ustawienia stylów */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 30px;
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+            margin-top: 20px;
+        }
+
+        #form-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        #form-container input {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        #form-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin-left: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #form-container button:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            #form-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #form-container input {
+                width: 100%;
+                max-width: none;
+                margin-bottom: 10px;
+            }
+
+            #form-container button {
+                width: 100%;
+            }
+        }
+
+        .leaflet-container {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Mushroom Map</h1>
+
+    <div id="form-container">
+        <input type="text" id="name" placeholder="Mushroom Name" required>
+        <input type="text" id="description" placeholder="Description" required>
+        <input type="number" id="rating" placeholder="Rating (1-5)" min="1" max="5">
+        <button id="add-mushroom">Add Mushroom</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        const broker = "ws://test.mosquitto.org:8080/mqtt";
+        const topic = "/map/mushrooms";
+
+        // Inicjalizacja mapy Leaflet
+        const map = L.map('map').setView([54.075295, 17.900000], 15);  // Domyślnie w Grzybowie
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        // Funkcja dodająca znacznik do mapy
+        const addMarker = (data) => {
+            const marker = L.marker([data.latitude, data.longitude]).addTo(map);
+            marker.bindPopup(`
+                <b>${data.name}</b><br>
+                ${data.description}<br>
+                Rating: ${data.rating || "No rating yet"}
+            `);
+        };
+
+        // Połączenie z brokerem MQTT przez WebSocket
+        const client = new Paho.MQTT.Client(broker, "clientId" + Math.random());
+        client.onMessageArrived = (message) => {
+            const data = JSON.parse(message.payloadString);
+            console.log("New mushroom data:", data);
+            addMarker(data);
+        };
+        client.connect({
+            onSuccess: () => {
+                console.log("Connected to MQTT broker");
+                client.subscribe(topic);
+            }
+        });
+
+        document.getElementById('add-mushroom').addEventListener('click', async () => {
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const rating = document.getElementById('rating').value;
+            
+            if (!name || !description) {
+                alert("Name and description are required!");
+                return;
+            }
+
+            // Pobranie współrzędnych z kliknięcia na mapie
+            map.once('click', async (e) => {
+                const latitude = e.latlng.lat;
+                const longitude = e.latlng.lng;
+
+                // Publikowanie lokalizacji grzyba
+                const response = await fetch('/add_mushroom', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ latitude, longitude, name, description, rating })
+                });
+                if (response.ok) {
+                    alert("Mushroom added!");
+                } else {
+                    alert("Failed to add mushroom.");
+                }
+            });
+            alert("Click on the map to select mushroom location.");
+        });
+    </script>
+</body>
+</html>
