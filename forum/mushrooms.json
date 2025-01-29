@@ -643,5 +643,13 @@
             "North America",
             "Europe"
         ]
+    },
+    {
+        "description": "ff",
+        "id": 19,
+        "latitude": 54.07635598471656,
+        "longitude": 17.900657877763866,
+        "name": "ff",
+        "rating": "1"
     }
 ]

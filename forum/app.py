@@ -7,6 +7,8 @@ app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 DATA_FILE = 'mushrooms.json'
+MushroomPoint = 'MushroomPoint.json'
+
 
 broker = "test.mosquitto.org"  
 port = 1883
@@ -164,24 +166,77 @@ def search_mushrooms():
 
 
 # MQTT API do publikowania lokalizacji grzybów
-@app.route("/add_mushroom", methods=["POST"])
+@app.route("/add_mushroompoints", methods=["POST"])
 def mqtt_add_mushroom():
     data = request.json
-    mushroom_data = {
+    mushroompoints_data = {
         "latitude": data["latitude"],
         "longitude": data["longitude"],
         "name": data["name"],
         "description": data["description"],
         "rating": data.get("rating", 0)
     }
-    mqtt_message = json.dumps(mushroom_data)  # Użyj json.dumps zamiast jsonify
+    mqtt_message = json.dumps(mushroompoints_data)  
     mqtt_client.publish(topic, mqtt_message)
-    return {"status": "Published", "data": mushroom_data}, 201
+    return {"status": "Published", "data": mushroompoints_data}, 201
+
+
 
 # Strona do wyświetlania mapy i dodawania lokalizacji grzybów
 @app.route('/map')
 def map():
     return render_template('map.html')
+
+MUSHROOM_FILE = "mushroompoints.json"
+
+def load_mushroom_points():
+    if os.path.exists(MUSHROOM_FILE):
+        with open(MUSHROOM_FILE, 'r') as file:
+            try:
+                return json.load(file)
+            except json.JSONDecodeError:
+                return []  
+    return []
+
+def save_mushroomspoint(mushrooms):
+    with open(MUSHROOM_FILE, 'w') as file:
+        json.dump(mushrooms, file, indent=4)
+
+
+#CRUD dla MushroomPoint
+@app.route('/mushroompoints', methods=['POST'])
+def create_mushroompoints():
+    mushroompoints = load_mushroom_points()  
+    new_mushroompoints = request.json  
+    new_mushroompoints['id'] = max([m['id'] for m in mushroompoints], default=0) + 1  
+    mushroompoints.append(new_mushroompoints)  
+    save_mushroomspoint(mushroompoints)  
+    return jsonify(new_mushroompoints), 201  
+
+@app.route('/mushroompoints', methods=['GET'])
+def get_mushroompoints():
+    mushroompoints = load_mushroom_points() 
+    return jsonify(mushroompoints)  
+
+@app.route('/mushroompoints/<int:mushroompoint_id>', methods=['PUT'])
+def update_mushroompoint(mushroompoint_id):
+    mushroompoints = load_mushroom_points()
+    mushroom = next((m for m in mushroompoints if m['id'] == mushroompoint_id), None)
+    
+    if mushroom:
+        for key, value in request.json.items():
+            mushroom[key] = value
+        save_mushroomspoint(mushroompoints) 
+        return jsonify(mushroom)
+    
+    return jsonify({'error': 'MushroomPoint not found'}), 404
+
+@app.route('/mushroompoints/<int:mushroompoint_id>', methods=['DELETE'])
+def delete_mushroompoints(mushroompoint_id):  
+    mushroompoints = load_mushroom_points() 
+    mushroompoints = [m for m in mushroompoints if m['id'] != mushroompoint_id]  
+    save_mushroomspoint(mushroompoints)  
+    return '', 204  
 
 if __name__ == "__main__":
     app.run(debug=True)
