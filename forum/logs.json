@@ -1,0 +1,18 @@
+[
+    {
+        "timestamp": "2025-01-30T19:43:51.535801",
+        "level": "WARNING",
+        "message": " * Debugger is active!",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    },
+    {
+        "timestamp": "2025-01-30T19:43:51.541316",
+        "level": "INFO",
+        "message": " * Debugger PIN: 980-034-558",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    }
+]

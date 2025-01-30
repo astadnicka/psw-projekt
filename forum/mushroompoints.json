@@ -30,5 +30,13 @@
         "latitude": 54.07701865174202,
         "longitude": 17.89549684521262,
         "id": 8
+    },
+    {
+        "name": "muchomor",
+        "description": "truj\u0105cy! uwa\u017ca\u0107",
+        "rating": "1",
+        "latitude": 54.076874191034804,
+        "longitude": 17.902865409851078,
+        "id": 9
     }
 ]
