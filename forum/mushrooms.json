@@ -658,20 +658,5 @@
         "habitat": "ss",
         "fairyRings": true,
         "id": 19
-    },
-    {
-        "latin": "aaaaaaaaccccc",
-        "common": [
-            "aaaaaaaaaaaaaaaa"
-        ],
-        "confusedWith": [
-            "aaaaaaaaaaaa"
-        ],
-        "regions": [
-            "aaaaaaaaaaaaaaa"
-        ],
-        "habitat": "aaaaaa",
-        "fairyRings": true,
-        "id": 20
     }
 ]

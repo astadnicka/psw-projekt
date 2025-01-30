@@ -1,13 +1,5 @@
 [
     {
-        "description": "smaczny",
-        "id": 2,
-        "latitude": 54.0773477781405,
-        "longitude": 17.897917334586158,
-        "name": "borowik",
-        "rating": "5"
-    },
-    {
         "description": "smaczniutka, polecam",
         "id": 3,
         "latitude": 54.07883805982993,
@@ -16,27 +8,27 @@
         "rating": "5"
     },
     {
-        "name": "1",
-        "description": "1",
-        "rating": "1",
-        "latitude": 54.077730247830424,
-        "longitude": 17.894720077383685,
-        "id": 4
-    },
-    {
-        "name": "1",
-        "description": "1",
-        "rating": "1",
+        "name": "borowik",
+        "description": "du\u017co borowik\u00f3w!!!",
+        "rating": "5",
         "latitude": 54.07702526116396,
         "longitude": 17.895707130301165,
         "id": 5
     },
     {
-        "name": "2",
-        "description": "2",
-        "rating": 0,
+        "name": "boczniak",
+        "description": "lepszy ni\u017c schabowy!",
+        "rating": "5",
         "latitude": 54.075665610208986,
         "longitude": 17.896951675284075,
         "id": 6
+    },
+    {
+        "name": "borowik",
+        "description": "sszmaczny",
+        "rating": "5",
+        "latitude": 54.07701865174202,
+        "longitude": 17.89549684521262,
+        "id": 8
     }
 ]

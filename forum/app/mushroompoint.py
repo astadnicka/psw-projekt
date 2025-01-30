@@ -50,10 +50,16 @@ def create_mushroompoints():
     save_mushroomspoint(mushroompoints)  
     return jsonify(new_mushroompoints), 201  
 
-@mushroompoint_bp.route('/mushroompoints', methods=['GET'])
-def get_mushroompoints():
-    mushroompoints = load_mushroom_points() 
-    return jsonify(mushroompoints)  
+@mushroompoint_bp.route('/mushroompoints/<int:mushroompoint_id>', methods=['GET'])
+def get_mushroompoint(mushroompoint_id):
+    mushroompoints = load_mushroom_points()
+    mushroom = next((m for m in mushroompoints if m['id'] == mushroompoint_id), None)
+    
+    if mushroom:
+        return jsonify(mushroom)
+    
+    return jsonify({'error': 'MushroomPoint not found'}), 404
+
 
 @mushroompoint_bp.route('/mushroompoints/<int:mushroompoint_id>', methods=['PUT'])
 def update_mushroompoint(mushroompoint_id):
@@ -69,8 +75,8 @@ def update_mushroompoint(mushroompoint_id):
     return jsonify({'error': 'MushroomPoint not found'}), 404
 
 @mushroompoint_bp.route('/mushroompoints/<int:mushroompoint_id>', methods=['DELETE'])
-def delete_mushroompoints(mushroompoint_id):  
-    mushroompoints = load_mushroom_points() 
-    mushroompoints = [m for m in mushroompoints if m['id'] != mushroompoint_id]  
+def delete_mushroompoint(mushroompoint_id):
+    mushroompoints = load_mushroom_points()
+    mushroompoints = [m for m in mushroompoints if m['id'] != mushroompoint_id]
     save_mushroomspoint(mushroompoints)  
     return '', 204

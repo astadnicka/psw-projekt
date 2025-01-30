@@ -119,6 +119,8 @@
         <input type="text" id="description" placeholder="Description" required>
         <input type="number" id="rating" placeholder="Rating (1-5)" min="1" max="5">
         <button id="add-mushroompoint">Add Mushroom Point</button>
+        <button id="edit-mushroompoint" style="display:none;">Edit Mushroom Point</button>
+        <button id="delete-mushroompoint" style="display:none;">Delete Mushroom Point</button>
     </div>
 
     <div id="map"></div>
@@ -126,23 +128,24 @@
     <script>
         const apiUrl = '/mushroompoints.json';  
         const apiGetUrl = '/mushroompoints.json'; 
-    
-        // Inicjalizacja mapy Leaflet
-        const map = L.map('map').setView([54.075295, 17.900000], 15);  // Domyślnie w Grzybowie
+
+        const map = L.map('map').setView([54.075295, 17.900000], 15);  
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19
         }).addTo(map);
-    
-        // Funkcja dodająca znacznik do mapy
+
         const addMarker = (data) => {
             const marker = L.marker([data.latitude, data.longitude]).addTo(map);
             marker.bindPopup(`
                 <b>${data.name}</b><br>
                 ${data.description}<br>
-                Rating: ${data.rating || "No rating yet"}
+                Rating: ${data.rating || "No rating yet"}<br>
+                <button onclick="editMushroom(${data.id})">Edit</button>
+                <button onclick="deleteMushroom(${data.id})">Delete</button>
             `);
+
         };
-    
+
         const loadMushrooms = async () => {
             try {
                 const response = await fetch(apiGetUrl);
@@ -156,9 +159,9 @@
                 alert("Failed to load mushroom points.");
             }
         };
-    
+
         loadMushrooms();
-    
+
         document.getElementById('add-mushroompoint').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const description = document.getElementById('description').value;
@@ -207,8 +210,82 @@
             });
         });
 
+        // Edit Mushroom Functionality
+        let currentEditId = null;
+        function editMushroom(id) {
+            fetch(`/mushroompoints/${id}`)
+                .then(response => response.json())
+                .then(mushroom => {
+                    document.getElementById('name').value = mushroom.name;
+                    document.getElementById('description').value = mushroom.description;
+                    document.getElementById('rating').value = mushroom.rating;
+                    currentEditId = mushroom.id;
 
+                    document.getElementById('add-mushroompoint').style.display = 'none';
+                    document.getElementById('edit-mushroompoint').style.display = 'inline';
+                    document.getElementById('delete-mushroompoint').style.display = 'inline';
+                });
+        }
+
+        document.getElementById('edit-mushroompoint').addEventListener('click', async () => {
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const rating = document.getElementById('rating').value;
+
+            if (!name || !description) {
+                alert("Name and description are required!");
+                return;
+            }
+
+            const updatedMushroom = { name, description, rating: rating || 0 };
+
+            try {
+                const response = await fetch(`/mushroompoints/${currentEditId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedMushroom)
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                alert("Mushroom updated!");
+                loadMushrooms();
+                resetForm();
+            } catch (error) {
+                console.error("Failed to update mushroom:", error);
+                alert("Failed to update mushroom.");
+            }
+        });
+
+        // Delete Mushroom Functionality
+        function deleteMushroom(id) {
+            if (confirm("Are you sure you want to delete this mushroom?")) {
+                fetch(`/mushroompoints/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    alert("Mushroom deleted!");
+                    loadMushrooms();
+                })
+                .catch(error => {
+                    console.error("Failed to delete mushroom:", error);
+                    alert("Failed to delete mushroom.");
+                });
+            }
+        }
+
+
+        function resetForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('rating').value = '';
+            currentEditId = null;
+
+            document.getElementById('add-mushroompoint').style.display = 'inline';
+            document.getElementById('edit-mushroompoint').style.display = 'none';
+            document.getElementById('delete-mushroompoint').style.display = 'none';
+        }
     </script>
-    
 </body>
 </html>
