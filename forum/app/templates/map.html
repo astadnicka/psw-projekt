@@ -124,8 +124,8 @@
     <div id="map"></div>
 
     <script>
-        const apiUrl = '/mushroompoints';  
-        const apiGetUrl = '/mushroompoints'; 
+        const apiUrl = '/mushroompoints.json';  
+        const apiGetUrl = '/mushroompoints.json'; 
     
         // Inicjalizacja mapy Leaflet
         const map = L.map('map').setView([54.075295, 17.900000], 15);  // Domyślnie w Grzybowie
@@ -190,7 +190,7 @@
                 };
 
                 try {
-                    const response = await fetch(apiUrl, {
+                    const response = await fetch('/mushroompoints', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(newMushroom)
@@ -206,6 +206,7 @@
                 }
             });
         });
+
 
     </script>
     
