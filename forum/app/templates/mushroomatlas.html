@@ -42,8 +42,8 @@
             margin: 0 auto;
             padding: 80px 40px;
             background: rgba(169, 163, 119, 0.9);
-             background-image: url('/static/atlas.jpg');
-             background-position: 0px -30px;
+            background-image: url("/static/atlas.jpg");
+            background-position: 0px -30px;
 
 
             box-shadow: 0 0 20px #9b6d3e,inset 0px 2px 10px  rgba(128, 91, 54, 0.6);
@@ -168,7 +168,7 @@
             </div>
 
 
-        <div class="form-container">
+        <div class="form-container" id="add-mushroom-container" style="display:none;">
             <h2>Add a New Mushroom</h2>
             <form id="add-mushroom-form">
                 <input type="text" id="latin" placeholder="Latin Name" required>
@@ -206,6 +206,11 @@
     </div>
 
     <script>
+            const isAdmin = JSON.parse('{{ session.get("isAdmin", False) | tojson }}');
+            if (isAdmin) {
+                document.getElementById('add-mushroom-container').style.display = 'block';
+            }
+
             document.getElementById('search-mushroom-form').addEventListener('submit', function (e) {
                 e.preventDefault();
                 const query = document.getElementById('search-query').value.trim();
@@ -245,8 +250,9 @@
                             <li><strong>Habitat:</strong> ${mushroom.habitat}</li>
                             <li><strong>Fairy Rings:</strong> ${mushroom.fairyRings ? 'Yes' : 'No'}</li>
                         </ul>
-                        <button onclick="editMushroom(${mushroom.id})">Edit</button>
-                        <button onclick="deleteMushroom(${mushroom.id})">Delete</button>
+                        <button onclick="editMushroom(${mushroom.id})" style="display:${isAdmin ? 'inline-block' : 'none'}">Edit</button>
+                        <button onclick="deleteMushroom(${mushroom.id})" style="display:${isAdmin ? 'inline-block' : 'none'}">Delete</button>
+
                     `;
                     mushroomList.appendChild(card);
                 });

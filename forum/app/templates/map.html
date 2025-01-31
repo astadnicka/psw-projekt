@@ -126,6 +126,19 @@
     <div id="map"></div>
 
     <script>
+        const isLoggedIn = '{{ session.get("username") }}' !== '';
+    
+        if (!isLoggedIn) {
+            // Ukryj cały formularz dodawania nowych znaczników
+            document.getElementById('form-container').style.display = 'none';  
+
+            // Ukryj przyciski edycji i usuwania w popupach znaczników
+            //  document.querySelectorAll('.popupEdit, .popupDelete').forEach(button => {
+            //     button.style.display = 'none';
+            //  }); 
+             
+        }
+
         const apiUrl = '/mushroompoints.json';  
         const apiGetUrl = '/mushroompoints.json'; 
 
@@ -136,14 +149,20 @@
 
         const addMarker = (data) => {
             const marker = L.marker([data.latitude, data.longitude]).addTo(map);
-            marker.bindPopup(`
+            let popupContent = `
                 <b>${data.name}</b><br>
                 ${data.description}<br>
                 Rating: ${data.rating || "No rating yet"}<br>
-                <button onclick="editMushroom(${data.id})">Edit</button>
-                <button onclick="deleteMushroom(${data.id})">Delete</button>
-            `);
+            `;
+           
+            if (isLoggedIn) {
+                popupContent += `
+                    <button onclick="editMushroom(${data.id})" class="popupEdit">Edit</button>
+                    <button onclick="deleteMushroom(${data.id})" class="popupDelete">Delete</button>
+                `;
+            }
 
+            marker.bindPopup(popupContent);
         };
 
         const loadMushrooms = async () => {

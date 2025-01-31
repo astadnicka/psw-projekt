@@ -8,6 +8,7 @@ class User:
     def __init__(self, username, password):
         self.username = username
         self.password = password
+        self.isAdmin = False
 
     @classmethod
     def load_users(cls):
@@ -57,3 +58,5 @@ class User:
         if len(filtered_users) == len(users):
             raise ValueError(f"Użytkownik o nazwie '{username}' nie istnieje.")
         cls.save_users(filtered_users)
+    
+    

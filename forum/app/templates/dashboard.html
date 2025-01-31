@@ -13,8 +13,31 @@
             <li><a href="{{ url_for('main.map')}}">Mapa Grzybów</a></li>
         </ul>
     </nav>
-    <h1>Welcome, {{ username }}!</h1>
-    <p>You are logged in as a registered user.</p>
+
+    <h1 id="welcomeMessage"></h1>
+    <p id="statusMessage"></p>
+
     <a href="{{ url_for('main.logout') }}">Log out</a>
+
+    <script>
+        const isLoggedIn = '{{ session.get("username") }}' !== '';
+        const isAdmin = '{{ session.get("isAdmin") }}'; 
+
+        window.onload = function() {
+            if (isLoggedIn) {
+                if (isAdmin) {
+                    document.getElementById('welcomeMessage').innerHTML = `Welcome, Admin!`;
+                    document.getElementById('statusMessage').innerHTML = 'You have admin privileges.';
+                } else {
+                    document.getElementById('welcomeMessage').innerHTML = `Welcome, {{ username }}!`;
+                    document.getElementById('statusMessage').innerHTML = 'You are logged in as a registered user.';
+                }
+            } else {
+                document.getElementById('welcomeMessage').innerHTML = 'Welcome!';
+                document.getElementById('statusMessage').innerHTML = 'You are logged in as a guest.';
+            }
+        }
+    </script>
 </body>
+
 </html>

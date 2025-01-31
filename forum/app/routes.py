@@ -18,6 +18,7 @@ def login():
         user_data = User.read(username)
         if user_data and user_data["password"] == password:
             session["username"] = username
+            session["isAdmin"] = user_data["isAdmin"]  # Dodajemy informację o adminie do sesji
             flash(f"Welcome, {username}!", "success")
             return redirect(url_for("main.dashboard"))
         else:
@@ -84,3 +85,12 @@ def get_mushroompoints_json():
     return send_from_directory(
         os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), 'mushroompoints.json'
     )
+
+
+@main_bp.route("/guest")
+def guest_login():
+    session["username"] = ''
+    session["isAdmin"] = False  
+    flash("You are now visiting as a guest.", "info")
+    return redirect(url_for("main.dashboard"))
+

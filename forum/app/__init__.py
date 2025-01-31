@@ -16,6 +16,7 @@ def clear_logs():
         json.dump([], file, indent=4)
 
 def log_to_json(level, message):
+    """Zapisuje logi do pliku logs.json"""
     log_entry = {
         "timestamp": datetime.now().isoformat(),
         "level": level,
@@ -25,13 +26,19 @@ def log_to_json(level, message):
         "ip": request.remote_addr if request else "N/A"
     }
 
-    with open(LOG_FILE, "r") as file:
-        logs = json.load(file)
+    # Sprawdzamy, czy plik jest pusty lub nieistniejący
+    try:
+        with open(LOG_FILE, "r") as file:
+            logs = json.load(file)
+    except (json.JSONDecodeError, FileNotFoundError):
+        # Jeśli plik jest pusty lub nie istnieje, inicjalizujemy go jako pustą listę
+        logs = []
 
     logs.append(log_entry)
 
     with open(LOG_FILE, "w") as file:
         json.dump(logs, file, indent=4)
+
 
 class JsonFileHandler(logging.Handler):
     def emit(self, record):

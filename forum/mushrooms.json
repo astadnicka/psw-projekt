@@ -645,17 +645,17 @@
         ]
     },
     {
-        "latin": "sssss",
+        "latin": "aaaaaaaaaa",
         "common": [
-            "sss"
+            "aaaaaaaaaaaaaa"
         ],
         "confusedWith": [
-            "sss"
+            "aaaaaaaaaaaa"
         ],
         "regions": [
-            "ssss"
+            "aaaaaaaaaaaa"
         ],
-        "habitat": "ss",
+        "habitat": "aaaaaaaaaaaaaa",
         "fairyRings": true,
         "id": 19
     }
