@@ -8,7 +8,7 @@ class User:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.isAdmin = False
+        self.isAdmin = False  # Domyślnie każdy nowy użytkownik ma isAdmin = False
 
     @classmethod
     def load_users(cls):
@@ -30,7 +30,8 @@ class User:
         users = self.load_users()
         if any(u["username"] == self.username for u in users):
             raise ValueError(f"Użytkownik o nazwie '{self.username}' już istnieje.")
-        users.append({"username": self.username, "password": self.password})
+        
+        users.append({"username": self.username, "password": self.password, "isAdmin": self.isAdmin})
         self.save_users(users)
 
     @classmethod
@@ -58,5 +59,3 @@ class User:
         if len(filtered_users) == len(users):
             raise ValueError(f"Użytkownik o nazwie '{username}' nie istnieje.")
         cls.save_users(filtered_users)
-    
-    

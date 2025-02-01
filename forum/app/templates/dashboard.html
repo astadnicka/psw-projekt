@@ -21,17 +21,18 @@
 
     <script>
         const isLoggedIn = '{{ session.get("username") }}' !== '';
-        const isAdmin = '{{ session.get("isAdmin") }}'; 
-
+        const isAdmin = JSON.parse('{{ session.get("isAdmin", False) | tojson }}');
+           
+        
         window.onload = function() {
             if (isLoggedIn) {
+                document.getElementById('welcomeMessage').innerHTML = `Welcome, {{ username }}!`;
+                document.getElementById('statusMessage').innerHTML = 'You are logged in as a registered user.';
                 if (isAdmin) {
+                    console.log(isAdmin)
                     document.getElementById('welcomeMessage').innerHTML = `Welcome, Admin!`;
                     document.getElementById('statusMessage').innerHTML = 'You have admin privileges.';
-                } else {
-                    document.getElementById('welcomeMessage').innerHTML = `Welcome, {{ username }}!`;
-                    document.getElementById('statusMessage').innerHTML = 'You are logged in as a registered user.';
-                }
+                } 
             } else {
                 document.getElementById('welcomeMessage').innerHTML = 'Welcome!';
                 document.getElementById('statusMessage').innerHTML = 'You are logged in as a guest.';

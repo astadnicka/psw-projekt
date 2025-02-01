@@ -2,16 +2,36 @@
     {
         "username": "admin",
         "password": "admin1",
-        "isAdmin" : true
+        "isAdmin": true
     },
     {
         "username": "user1",
         "password": "pass1",
-        "isAdmin" : false
+        "isAdmin": false
     },
     {
         "username": "user2",
         "password": "pass3",
-        "isAdmin" : false
+        "isAdmin": false
+    },
+    {
+        "username": "user3",
+        "password": "pass3",
+        "isAdmin": false
+    },
+    {
+        "username": "user4",
+        "password": "pass4",
+        "isAdmin": false
+    },
+    {
+        "username": "user5",
+        "password": "pass5",
+        "isAdmin": false
+    },
+    {
+        "username": "user6",
+        "password": "pass6",
+        "isAdmin": false
     }
 ]

@@ -643,20 +643,5 @@
             "North America",
             "Europe"
         ]
-    },
-    {
-        "latin": "aaaaaaaaaa",
-        "common": [
-            "aaaaaaaaaaaaaa"
-        ],
-        "confusedWith": [
-            "aaaaaaaaaaaa"
-        ],
-        "regions": [
-            "aaaaaaaaaaaa"
-        ],
-        "habitat": "aaaaaaaaaaaaaa",
-        "fairyRings": true,
-        "id": 19
     }
 ]

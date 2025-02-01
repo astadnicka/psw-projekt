@@ -33,15 +33,19 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
 
+        # Sprawdzamy, czy użytkownik już istnieje
         if User.read(username):
-            flash("Username already exists!", "danger")
+            flash("Username is already taken!", "danger")
             return redirect(url_for("main.register"))
 
+        # Tworzymy nowego użytkownika
         new_user = User(username, password)
         try:
-            new_user.create()
-            flash("Registration successful! Please log in.", "success")
-            return redirect(url_for("main.login"))
+            new_user.create()  
+            session["username"] = username
+            session["isAdmin"] = new_user.isAdmin  
+            flash("Registration successful! Redirecting to dashboard.", "success")
+            return redirect(url_for("main.dashboard"))  
         except ValueError as e:
             flash(str(e), "danger")
             return redirect(url_for("main.register"))

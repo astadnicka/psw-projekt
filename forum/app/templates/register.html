@@ -4,18 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <style>
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Register</h1>
+
     <form method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
+        
+        <!-- Komunikat o błędzie pod polem username -->
+        {% if error_message %}
+            <div class="error-message">{{ error_message }}</div>
+        {% endif %}
+        
         <br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
         <br>
         <button type="submit">Register</button>
     </form>
+
     <p>Already have an account? <a href="{{ url_for('main.login') }}">Log in here</a></p>
 </body>
 </html>
