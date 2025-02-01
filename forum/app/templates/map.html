@@ -159,11 +159,17 @@
                 popupContent += `
                     <button onclick="editMushroom(${data.id})" class="popupEdit">Edit</button>
                     <button onclick="deleteMushroom(${data.id})" class="popupDelete">Delete</button>
+                    <button onclick="joinDiscussion(${data.latitude}, ${data.longitude})">Dołącz do dyskusji</button>
+
                 `;
             }
 
             marker.bindPopup(popupContent);
         };
+        function joinDiscussion(latitude, longitude) {
+            const roomUrl = `/chat/${latitude}/${longitude}`;
+            window.location.href = roomUrl;  
+        }
 
         const loadMushrooms = async () => {
             try {

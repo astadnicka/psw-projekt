@@ -1,88 +1,32 @@
 [
     {
-        "timestamp": "2025-02-01T13:38:13.102290",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [01/Feb/2025 13:38:13] \"\u001b[36mGET /mushrooms.json HTTP/1.1\u001b[0m\" 304 -",
+        "timestamp": "2025-02-01T17:04:17.336179",
+        "level": "WARNING",
+        "message": " * Debugger is active!",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-01T13:38:14.577163",
-        "level": "INFO",
-        "message": "Request to /dashboard",
-        "method": "GET",
-        "endpoint": "/dashboard",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-01T13:38:14.578588",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [01/Feb/2025 13:38:14] \"GET /dashboard HTTP/1.1\" 200 -",
+        "timestamp": "2025-02-01T17:04:17.336855",
+        "level": "WARNING",
+        "message": " * Debugger is active!",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-01T13:38:15.775552",
+        "timestamp": "2025-02-01T17:04:17.343076",
         "level": "INFO",
-        "message": "Request to /dashboard",
-        "method": "GET",
-        "endpoint": "/dashboard",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-01T13:38:15.777032",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [01/Feb/2025 13:38:15] \"GET /dashboard HTTP/1.1\" 200 -",
+        "message": " * Debugger PIN: 980-034-558",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-01T13:38:17.209675",
+        "timestamp": "2025-02-01T17:04:17.343911",
         "level": "INFO",
-        "message": "Request to /map",
-        "method": "GET",
-        "endpoint": "/map",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-01T13:38:17.211402",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [01/Feb/2025 13:38:17] \"GET /map HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-01T13:38:17.244137",
-        "level": "INFO",
-        "message": "Request to /static/map2.jpg",
-        "method": "GET",
-        "endpoint": "/static/map2.jpg",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-01T13:38:17.246482",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [01/Feb/2025 13:38:17] \"\u001b[36mGET /static/map2.jpg HTTP/1.1\u001b[0m\" 304 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-01T13:38:17.257490",
-        "level": "INFO",
-        "message": "Request to /mushroompoints.json",
-        "method": "GET",
-        "endpoint": "/mushroompoints.json",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-01T13:38:17.260897",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [01/Feb/2025 13:38:17] \"\u001b[36mGET /mushroompoints.json HTTP/1.1\u001b[0m\" 304 -",
+        "message": " * Debugger PIN: 980-034-558",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
