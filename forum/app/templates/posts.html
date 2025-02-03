@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Posty</title>
+    <style>
+        body {
+            background-image: url('/static/paperrepeat1.jpeg');
+            background-size: cover;
+            background-position: center 200px;
+            margin: 0;
+            font-family: 'Times New Roman', Times, serif;
+            color: #333;
+        }
+        .header {
+            background-image: url('/static/header.jpeg');
+            background-size: cover;
+            background-position: center;  
+            margin: 0;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 3em;
+            color: #4b3621;
+            text-shadow: 1px 1px 2px #ccc;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            margin: 20px 0 30px;
+            border: 1px solid #c09976;
+            padding: 15px;
+            background-color: #f4d6b1;
+            border-radius: 5px;
+            box-shadow: inset 0 0 3px 2px #caa97a, inset 0 0 10px 3px #f4d6b1, inset 0 0 70px 50px #e2bf8e, 0 0 5px 5px rgba(148, 114, 86, 0.168);
+        }
+        .form-container input[type="text"], 
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #c09976;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .post-card {
+            margin: 20px 0;
+            border: 1px solid #c09976;
+            padding: 15px;
+            background-color: #f4d6b1;
+            border-radius: 5px;
+            box-shadow: inset 0 0 3px 2px #caa97a,inset 0 0 10px 3px #f4d6b1, inset 0 0 70px 30px #e2bf8e, 0 0 5px 5px rgba(148, 114, 86, 0.168);
+        }
+        .post-card h3 {
+            margin-top: 0;
+            color: #4b3621;
+        }
+        .post-card p {
+            color: #333;
+            line-height: 1.5;
+        }
+        .post-card small {
+            color: #666;
+        }
+        #edit-form-container {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 15px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background-color: #4b3621;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Times New Roman', Times, serif;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #6b4e31;
+        }
+        input,textarea{
+            background: #efdac2;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+    </div>
+    <h1>Posty</h1>
+
+    <div class="container">
+        <div class="form-container" id="add-post-container">
+            <h2>Dodaj nowy post</h2>
+            <form id="add-post-form">
+                <input type="text" id="title" placeholder="Tytuł" required><br><br>
+                <textarea id="content" placeholder="Treść" rows="5" cols="50" required></textarea><br><br>
+                <button type="submit">Dodaj Post</button>
+            </form>
+        </div>
+
+        <div id="post-list"></div>
+
+        <div id="edit-form-container">
+            <h2>Edytuj Post</h2>
+            <form id="edit-post-form">
+                <input type="hidden" id="edit-id">
+                <input type="text" id="edit-title" placeholder="Tytuł" required><br><br>
+                <textarea id="edit-content" placeholder="Treść" rows="5" cols="50" required></textarea><br><br>
+                <button type="submit">Zapisz zmiany</button>
+                <button type="button" onclick="cancelEdit()">Anuluj</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+          const currentUser = JSON.parse('{{ session.get("username", "null") | tojson }}');
+          const isAdmin = JSON.parse('{{ session.get("isAdmin", "false") | tojson }}');
+          
+          document.addEventListener("DOMContentLoaded", () => {
+            const addPostContainer = document.getElementById('add-post-container');
+            
+            if (!currentUser) { 
+                addPostContainer.innerHTML = "<p>Musisz być zalogowany, aby dodać post.</p>";
+            }
+        });
+
+        document.getElementById('add-post-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const post = {
+                title: document.getElementById('title').value,
+                content: document.getElementById('content').value,
+            };
+            fetch('/post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(post)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchPosts();
+                this.reset();
+            })
+            .catch(error => console.error('Error adding post:', error));
+        });
+
+        function fetchPosts() {
+            fetch('/api/posts')
+                .then(response => response.json())
+                .then(data => displayPosts(data))
+                .catch(error => console.error('Error fetching posts:', error));
+        }
+
+        function displayPosts(posts) {
+            const postList = document.getElementById('post-list');
+            postList.innerHTML = '';
+
+            posts.forEach(post => {
+                const postCard = document.createElement('div');
+                postCard.classList.add('post-card');
+
+                let buttons = "";
+                if (post.author === currentUser) { 
+                    buttons += `<button onclick="editPost(${post.id})">Edytuj</button>`;
+                }
+                if (post.author === currentUser || isAdmin) { 
+                    buttons += `<button onclick="deletePost(${post.id})">Usuń</button>`;
+                }
+
+                postCard.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <p>${post.content}</p>
+                    <p><small>Autor: ${post.author ? post.author : "Nieznany"}</small></p>
+                    ${buttons}
+                `;
+
+                postList.appendChild(postCard);
+            });
+        }
+
+
+
+
+        fetchPosts();
+
+
+    // document.getElementById('add-post-form').addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //     const post = {
+    //         title: document.getElementById('title').value,
+    //         content: document.getElementById('content').value,
+    //     };
+    //     fetch('/post', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify(post)
+    //     })
+    //     .then(response => response.json())
+    //     .then(() => {
+    //         fetchPosts();
+    //         this.reset();
+    //     })
+    //     .catch(error => console.error('Error adding post:', error));
+    // });
+
+    function editPost(id) {
+        fetch(`/post/${id}`)
+        .then(response => response.json())
+        .then(post => {
+            document.getElementById('edit-id').value = post.id;
+            document.getElementById('edit-title').value = post.title;
+            document.getElementById('edit-content').value = post.content;
+            document.getElementById('edit-form-container').style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching post details:', error));
+    }
+
+    document.getElementById('edit-post-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const post = {
+            title: document.getElementById('edit-title').value,
+            content: document.getElementById('edit-content').value
+        };
+        const id = document.getElementById('edit-id').value;
+
+        fetch(`/post/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(post)
+        })
+        .then(response => response.json())
+        .then(() => {
+            fetchPosts();
+            cancelEdit();
+        })
+        .catch(error => console.error('Error updating post:', error));
+    });
+
+    function deletePost(id) {
+        if (confirm("Czy na pewno chcesz usunąć ten post?")) {
+            fetch(`/post/${id}`, { method: 'DELETE' })
+            .then(() => fetchPosts())
+            .catch(error => console.error('Error deleting post:', error));
+        }
+    }
+
+        fetchPosts();
+    </script>
+</body>
+</html>

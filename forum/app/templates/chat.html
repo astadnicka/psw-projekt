@@ -41,11 +41,16 @@
             margin: 65px 60px 140px;
             height: 320px;
             width: 370px;
+            overflow-y: auto;
+            scrollbar-width: none; 
             /* border:2px solid; */
             line-height: 46px;
             p{
                 margin: 0;
             }
+        }
+        .messages::-webkit-scrollbar {
+            display: none; 
         }
         .input{
             position: absolute;

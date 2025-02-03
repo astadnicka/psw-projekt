@@ -1,6 +1,6 @@
 [
     {
-        "timestamp": "2025-02-01T17:04:17.336179",
+        "timestamp": "2025-02-03T15:38:41.465411",
         "level": "WARNING",
         "message": " * Debugger is active!",
         "method": "N/A",
@@ -8,7 +8,7 @@
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-01T17:04:17.336855",
+        "timestamp": "2025-02-03T15:38:41.466198",
         "level": "WARNING",
         "message": " * Debugger is active!",
         "method": "N/A",
@@ -16,7 +16,7 @@
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-01T17:04:17.343076",
+        "timestamp": "2025-02-03T15:38:41.472019",
         "level": "INFO",
         "message": " * Debugger PIN: 980-034-558",
         "method": "N/A",
@@ -24,7 +24,7 @@
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-01T17:04:17.343911",
+        "timestamp": "2025-02-03T15:38:41.472704",
         "level": "INFO",
         "message": " * Debugger PIN: 980-034-558",
         "method": "N/A",

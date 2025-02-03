@@ -9,6 +9,8 @@ from app.mushroompoint import mushroompoint_bp
 from app.routes import main_bp
 from app.chat import chat_bp
 from app.chat import register_chat_blueprint 
+from app.posts import posts_bp
+
 
 LOG_FILE = "logs.json"
 
@@ -57,6 +59,7 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(mushroom_bp)
     app.register_blueprint(mushroompoint_bp)
+    app.register_blueprint(posts_bp)
 
     register_chat_blueprint(app, socketio) 
 

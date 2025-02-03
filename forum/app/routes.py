@@ -110,3 +110,16 @@ def chat(latitude, longitude):
     room = f"{latitude},{longitude}"  
 
     return render_template('chat.html', username=username, room=room, latitude=latitude, longitude=longitude)
+
+
+@main_bp.route("/posts")
+def posts_page():
+    return render_template("posts.html")
+
+
+
+@main_bp.route('/posts.json')
+def get_posts_json():
+    return send_from_directory(
+        os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), 'posts.json'
+    )
