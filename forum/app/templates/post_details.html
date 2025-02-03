@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post z komentarzami</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .post {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .comment {
+            border: 1px solid #e1e1e1;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .comment button {
+            margin-left: 10px;
+            padding: 5px;
+        }
+
+        #add-comment-form textarea {
+            width: 100%;
+            padding: 10px;
+        }
+
+        #add-comment-form button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #add-comment-form button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Post -->
+    <div class="post">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <p><strong>Autor:</strong> {{ post.author }}</p>
+    </div>
+
+    {% if session["username"] %}
+        <h4>Dodaj komentarz</h4>
+        <form id="add-comment-form">
+            <textarea id="comment-content" placeholder="Treść komentarza" rows="5" cols="50" required></textarea><br><br>
+            <button type="submit">Dodaj Komentarz</button>
+        </form>
+    {% else %}
+        <p>Aby dodać komentarz, musisz być zalogowany.</p>
+    {% endif %}
+
+
+    <h4>Komentarze</h4>
+    <div id="comment-list">
+    </div>
+
+    <script>
+        function fetchComments() {
+            fetch(`/post/${window.postId}/comments`)
+                .then(response => response.json())
+                .then(comments => {
+                    const commentList = document.getElementById('comment-list');
+                    commentList.innerHTML = ''; 
+                    comments.forEach(comment => {
+                        const commentDiv = document.createElement('div');
+                        commentDiv.classList.add('comment');
+                        commentDiv.id = `comment-${comment.id}`;
+
+                        let buttons = "";
+                        if (comment.author === '{{ session["username"] }}') {
+                            buttons += `<button onclick="editComment(${comment.id})">Edytuj</button>`;
+                            buttons += `<button onclick="deleteComment(${comment.id})">Usuń</button>`;
+                        } else if (JSON.parse('{{ session.get("isAdmin", False) | tojson }}')) {
+                            buttons += `<button onclick="deleteComment(${comment.id})">Usuń</button>`;
+                        }
+
+                        commentDiv.innerHTML = `
+                            <p class="comment-text">${comment.content}</p> <!-- Klasa dla treści komentarza -->
+                            <p><small>Autor: ${comment.author}</small></p>
+                            ${buttons}
+                        `;
+                        commentList.appendChild(commentDiv);
+                    });
+                })
+                .catch(error => console.error('Błąd podczas pobierania komentarzy:', error));
+        }
+
+
+        function editComment(commentId) {
+            const commentElement = document.getElementById(`comment-${commentId}`);
+            const commentTextElement = commentElement.querySelector('.comment-text');
+            
+            const currentText = commentTextElement.innerText;
+            
+            commentTextElement.innerHTML = `
+                <input type="text" id="edit-input-${commentId}" value="${currentText}" style="width: 80%;">
+                <button onclick="saveEditedComment(${commentId})">Zapisz</button>
+                <button onclick="cancelEdit(${commentId}, '${currentText}')">Anuluj</button>
+            `;
+        }
+
+        function saveEditedComment(commentId) {
+            const newContent = document.getElementById(`edit-input-${commentId}`).value;
+
+            if (newContent.trim() === "") {
+                alert("Treść komentarza nie może być pusta!");
+                return;
+            }
+
+            fetch(`/post/${window.postId}/comment/${commentId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: newContent })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Komentarz nie został znaleziony');
+                }
+                return response.json();
+            })
+            .then(() => fetchComments()) 
+            .catch(error => console.error('Błąd podczas edycji komentarza:', error));
+        }
+
+        function cancelEdit(commentId, originalText) {
+            const commentTextElement = document.getElementById(`comment-${commentId}`).querySelector('.comment-text');
+            if (!commentTextElement) return;  
+            commentTextElement.innerHTML = originalText; 
+        }
+
+
+
+        function deleteComment(commentId) {
+            if (confirm("Czy na pewno chcesz usunąć ten komentarz?")) {
+                fetch(`/post/${window.postId}/comment/${commentId}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Komentarz nie został znaleziony');
+                        }
+                        fetchComments();
+                    })
+                    .catch(error => console.error('Error deleting comment:', error));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            window.postId = JSON.parse('{{ post.id | tojson }}'); 
+            fetchComments();
+
+            const addCommentForm = document.getElementById('add-comment-form');
+            if (addCommentForm) {
+                addCommentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const commentContent = document.getElementById('comment-content').value;
+
+                    fetch(`/post/${window.postId}/comment`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: commentContent })
+                    })
+                    .then(response => response.json())
+                    .then(() => {
+                        fetchComments();
+                        addCommentForm.reset();
+                    })
+                    .catch(error => console.error('Error adding comment:', error));
+                });
+            }
+        });
+
+    </script>
+
+</body>
+</html>

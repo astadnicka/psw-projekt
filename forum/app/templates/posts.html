@@ -6,7 +6,7 @@
     <style>
         body {
             background-image: url('/static/paperrepeat1.jpeg');
-            background-size: cover;
+            background-size: contain;
             background-position: center 200px;
             margin: 0;
             font-family: 'Times New Roman', Times, serif;
@@ -179,7 +179,7 @@
                 }
 
                 postCard.innerHTML = `
-                    <h3>${post.title}</h3>
+                    <h3><a href="/post_details/${post.id}">${post.title}</a></h3>
                     <p>${post.content}</p>
                     <p><small>Autor: ${post.author ? post.author : "Nieznany"}</small></p>
                     ${buttons}
@@ -188,6 +188,7 @@
                 postList.appendChild(postCard);
             });
         }
+
 
 
 
@@ -254,6 +255,13 @@
             .catch(error => console.error('Error deleting post:', error));
         }
     }
+    function cancelEdit() {
+        document.getElementById('edit-form-container').style.display = 'none';
+        document.getElementById('edit-id').value = '';
+        document.getElementById('edit-title').value = '';
+        document.getElementById('edit-content').value = '';
+    }
+
 
         fetchPosts();
     </script>

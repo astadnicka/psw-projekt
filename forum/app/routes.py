@@ -123,3 +123,6 @@ def get_posts_json():
     return send_from_directory(
         os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), 'posts.json'
     )
+
+# @main_bp.route('/post/<post.id>/comments', methods=['POST', 'GET'])
+# def get_comments

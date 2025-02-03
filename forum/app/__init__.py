@@ -10,6 +10,7 @@ from app.routes import main_bp
 from app.chat import chat_bp
 from app.chat import register_chat_blueprint 
 from app.posts import posts_bp
+# from app.comments import comments_bp
 
 
 LOG_FILE = "logs.json"
@@ -62,6 +63,7 @@ def create_app():
     app.register_blueprint(posts_bp)
 
     register_chat_blueprint(app, socketio) 
+    # app.register_blueprint(comments_bp)
 
     # Konfiguracja logowania
     logging.basicConfig(level=logging.INFO)
