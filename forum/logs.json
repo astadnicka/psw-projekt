@@ -1,32 +1,56 @@
 [
     {
-        "timestamp": "2025-02-04T18:12:00.938338",
-        "level": "WARNING",
-        "message": " * Debugger is active!",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T18:12:00.939000",
-        "level": "WARNING",
-        "message": " * Debugger is active!",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T18:12:00.944594",
+        "timestamp": "2025-02-04T21:05:46.422627",
         "level": "INFO",
-        "message": " * Debugger PIN: 980-034-558",
+        "message": "127.0.0.1 - - [04/Feb/2025 21:05:46] \"\u001b[36mGET /static/atlas.jpg HTTP/1.1\u001b[0m\" 304 -",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-04T18:12:00.945409",
+        "timestamp": "2025-02-04T21:05:46.430801",
         "level": "INFO",
-        "message": " * Debugger PIN: 980-034-558",
+        "message": "Request to /mushrooms.json",
+        "method": "GET",
+        "endpoint": "/mushrooms.json",
+        "ip": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-02-04T21:05:46.434595",
+        "level": "INFO",
+        "message": "127.0.0.1 - - [04/Feb/2025 21:05:46] \"\u001b[36mGET /mushrooms.json HTTP/1.1\u001b[0m\" 304 -",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    },
+    {
+        "timestamp": "2025-02-04T21:05:46.436195",
+        "level": "INFO",
+        "message": "127.0.0.1 - - [04/Feb/2025 21:05:46] \"\u001b[36mGET /mushrooms.json HTTP/1.1\u001b[0m\" 304 -",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    },
+    {
+        "timestamp": "2025-02-04T21:06:27.639201",
+        "level": "INFO",
+        "message": "Request to /mushrooms",
+        "method": "GET",
+        "endpoint": "/mushrooms",
+        "ip": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-02-04T21:06:27.641701",
+        "level": "INFO",
+        "message": "127.0.0.1 - - [04/Feb/2025 21:06:27] \"GET /mushrooms?pattern=ola HTTP/1.1\" 200 -",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    },
+    {
+        "timestamp": "2025-02-04T21:06:27.642552",
+        "level": "INFO",
+        "message": "127.0.0.1 - - [04/Feb/2025 21:06:27] \"GET /mushrooms?pattern=ola HTTP/1.1\" 200 -",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"

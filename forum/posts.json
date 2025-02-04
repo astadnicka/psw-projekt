@@ -1,81 +1,8 @@
 [
     {
-        "title": "sssssssssssssswww",
-        "content": "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-        "id": 2,
-        "author": "user1",
-        "comments": [
-            {
-                "content": "rrr",
-                "id": 2,
-                "author": "admin"
-            },
-            {
-                "content": "tfftgh",
-                "id": 3,
-                "author": "user1"
-            },
-            {
-                "content": "g",
-                "id": 4,
-                "author": "user2"
-            },
-            {
-                "content": "g",
-                "id": 5,
-                "author": "user2"
-            }
-        ]
-    },
-    {
-        "title": "rdrf",
-        "content": "fssss",
-        "id": 3,
-        "author": "user6",
-        "comments": [
-            {
-                "content": "dfgdfg",
-                "id": 1,
-                "author": "user1"
-            }
-        ]
-    },
-    {
-        "title": "sss",
-        "content": "sssssss",
-        "id": 4,
-        "author": "user6",
-        "comments": [
-            {
-                "content": "gggggg",
-                "id": 1,
-                "author": "user2"
-            }
-        ]
-    },
-    {
-        "title": "d",
-        "content": "d",
-        "id": 5,
-        "author": "user6",
-        "comments": [
-            {
-                "content": "ggggg",
-                "id": 2,
-                "author": "user2"
-            }
-        ]
-    },
-    {
-        "title": "d",
-        "content": "d",
-        "id": 7,
-        "author": "user6"
-    },
-    {
-        "title": "d",
-        "content": "d",
-        "id": 8,
-        "author": "user1"
+        "title": "Witajcie na forum!!!",
+        "content": "Tutaj możecie dodawać swoje posty!\n",
+        "id": 1,
+        "author": "admin"
     }
 ]

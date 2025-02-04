@@ -15,10 +15,10 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        user_data = User.read(username)
-        if user_data and user_data["password"] == password:
+        if User.verify_password(username, password):
+            user_data = User.read(username)
             session["username"] = username
-            session["isAdmin"] = user_data["isAdmin"]  # Dodajemy informację o adminie do sesji
+            session["isAdmin"] = user_data["isAdmin"]
             flash(f"Welcome, {username}!", "success")
             return redirect(url_for("main.dashboard"))
         else:
@@ -26,6 +26,7 @@ def login():
             return redirect(url_for("main.login"))
 
     return render_template("login.html")
+
 
 @main_bp.route("/register", methods=["GET", "POST"])
 def register():

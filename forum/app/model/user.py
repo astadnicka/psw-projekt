@@ -1,18 +1,17 @@
-# user.py
 import json
 import os
+import bcrypt
 
 class User:
     USERS_FILE = "users.json"
 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
-        self.isAdmin = False  # Domyślnie każdy nowy użytkownik ma isAdmin = False
+        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        self.isAdmin = False
 
     @classmethod
     def load_users(cls):
-        """Ładowanie użytkowników z pliku JSON."""
         if not os.path.exists(cls.USERS_FILE):
             with open(cls.USERS_FILE, "w") as f:
                 json.dump([], f)
@@ -21,41 +20,43 @@ class User:
 
     @classmethod
     def save_users(cls, users):
-        """Zapisywanie użytkowników do pliku JSON."""
         with open(cls.USERS_FILE, "w") as f:
             json.dump(users, f, indent=4)
 
     def create(self):
-        """Dodawanie nowego użytkownika."""
         users = self.load_users()
         if any(u["username"] == self.username for u in users):
             raise ValueError(f"Użytkownik o nazwie '{self.username}' już istnieje.")
         
-        users.append({"username": self.username, "password": self.password, "isAdmin": self.isAdmin})
+        users.append({"username": self.username, "password": self.password.decode('utf-8'), "isAdmin": self.isAdmin})
         self.save_users(users)
 
     @classmethod
     def read(cls, username):
-        """Wyszukiwanie użytkownika po nazwie użytkownika."""
         users = cls.load_users()
         user = next((u for u in users if u["username"] == username), None)
         return user
 
     @classmethod
     def update(cls, username, new_password):
-        """Aktualizacja hasła użytkownika."""
         users = cls.load_users()
         user = next((u for u in users if u["username"] == username), None)
         if not user:
             raise ValueError(f"Użytkownik o nazwie '{username}' nie istnieje.")
-        user["password"] = new_password
+        user["password"] = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         cls.save_users(users)
 
     @classmethod
     def delete(cls, username):
-        """Usuwanie użytkownika."""
         users = cls.load_users()
         filtered_users = [u for u in users if u["username"] != username]
         if len(filtered_users) == len(users):
             raise ValueError(f"Użytkownik o nazwie '{username}' nie istnieje.")
         cls.save_users(filtered_users)
+
+    @classmethod
+    def verify_password(cls, username, password):
+        user = cls.read(username)
+        if user:
+            return bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8'))
+        return False

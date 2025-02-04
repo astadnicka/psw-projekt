@@ -1,37 +1,37 @@
 [
     {
         "username": "admin",
-        "password": "admin1",
+        "password": "$2b$12$7TpG/aNDRjEJqJ7ux99A4u2wqKBJAENPtb.1jzz/oakVSXFlb27A2",
         "isAdmin": true
     },
     {
         "username": "user1",
-        "password": "pass1",
+        "password": "$2b$12$UMQH4oYQnZPUo2JtG81uUud4Ye96c88Lv54dqmcpGN.WVgbridE6S",
         "isAdmin": false
     },
     {
         "username": "user2",
-        "password": "pass2",
+        "password": "$2b$12$Rg7T2awvipk0P0Mzf.88puGVtYJ8ET7bi.slLwAyhRxhIH3vhLxz2",
         "isAdmin": false
     },
     {
         "username": "user3",
-        "password": "pass3",
+        "password": "$2b$12$SZ07oSSuQOE.m6HtyN6ouulK6FQZx/VcrfoIdh71Ey9bZWG4DGeGi",
         "isAdmin": false
     },
     {
         "username": "user4",
-        "password": "pass4",
+        "password": "$2b$12$nyzTOSxtF6eU0zJdVMhlBebgrI2kA19ESAm11l3MzNWDHxNU/j21e",
         "isAdmin": false
     },
     {
         "username": "user5",
-        "password": "pass5",
+        "password": "$2b$12$Er.3IvifIN8NkSqwcR73L.nmi9EDBYpGjLliMChp4Y1y.ppNaJUaG",
         "isAdmin": false
     },
     {
         "username": "user6",
-        "password": "pass6",
+        "password": "$2b$12$18qBnSUbnTUKsnTxR.Oqt.59sfR0BDnGcT6WSSWd0vQ5Q928aJ/1C",
         "isAdmin": false
     }
 ]
