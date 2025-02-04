@@ -3,6 +3,26 @@
         "title": "Witajcie na forum!!!",
         "content": "Tutaj możecie dodawać swoje posty!\n",
         "id": 1,
-        "author": "admin"
+        "author": "admin",
+        "comments": [
+            {
+                "content": "Super!!!\n",
+                "id": 1,
+                "author": "user1"
+            }
+        ]
+    },
+    {
+        "title": "d",
+        "content": "d",
+        "id": 2,
+        "author": "user1",
+        "comments": []
+    },
+    {
+        "title": "d",
+        "content": "d",
+        "id": 3,
+        "author": "user1"
     }
 ]

@@ -39,6 +39,7 @@
             color: white;
             border: none;
             cursor: pointer;
+            
         }
 
         #add-comment-form button:hover {
@@ -168,7 +169,11 @@
                 addCommentForm.addEventListener('submit', function(e) {
                     e.preventDefault();
 
-                    const commentContent = document.getElementById('comment-content').value;
+                    const commentContent = document.getElementById('comment-content').value.trim();
+                    if (commentContent === "") {
+                     alert("Treść komentarza nie może być pusta!");
+                    return;
+                    }
 
                     fetch(`/post/${window.postId}/comment`, {
                         method: 'POST',

@@ -33,5 +33,10 @@
         "username": "user6",
         "password": "$2b$12$18qBnSUbnTUKsnTxR.Oqt.59sfR0BDnGcT6WSSWd0vQ5Q928aJ/1C",
         "isAdmin": false
+    },
+    {
+        "username": "user7",
+        "password": "$2b$12$32j7qxZ9XJ9UPTvPdHketugxC6MB3EnNEdvRemCQiLTpDRmutr3dO",
+        "isAdmin": false
     }
 ]
