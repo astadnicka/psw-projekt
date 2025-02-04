@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mushroom Map</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <title>Mapa Grzybów</title>
+    <!-- Styl CSS dla Leaflet -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <!-- Skrypt JavaScript dla Leaflet -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <!-- Biblioteka MQTT.js -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <style>
         
 
@@ -120,87 +124,99 @@
         <input type="number" id="rating" placeholder="Rating (1-5)" min="1" max="5">
         <button id="add-mushroompoint">Add Mushroom Point</button>
         <button id="edit-mushroompoint" style="display:none;">Edit Mushroom Point</button>
-        <!-- <button id="delete-mushroompoint" style="display:none;">Delete Mushroom Point</button> -->
     </div>
 
     <div id="map"></div>
 
     <script>
         const isLoggedIn = '{{ session.get("username") }}' !== '';
-    
-        if (!isLoggedIn) {
-            // Ukryj cały formularz dodawania nowych znaczników
-            document.getElementById('form-container').style.display = 'none';  
 
-            // Ukryj przyciski edycji i usuwania w popupach znaczników
-            //  document.querySelectorAll('.popupEdit, .popupDelete').forEach(button => {
-            //     button.style.display = 'none';
-            //  }); 
-             
+        if (!isLoggedIn) {
+            document.getElementById('form-container').style.display = 'none';
         }
 
-        const apiUrl = '/mushroompoints.json';  
-        const apiGetUrl = '/mushroompoints.json'; 
+        const apiUrl = '/mushroompoints.json';
+        const apiGetUrl = '/mushroompoints.json';
 
-        const map = L.map('map').setView([54.075295, 17.900000], 15);  
+        const map = L.map('map').setView([54.075295, 17.900000], 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19
         }).addTo(map);
 
+        // Funkcja dodająca znacznik na mapie
         const addMarker = (data) => {
             const marker = L.marker([data.latitude, data.longitude]).addTo(map);
             let popupContent = `
                 <b>${data.name}</b><br>
                 ${data.description}<br>
-                Rating: ${data.rating || "No rating yet"}<br>
+                Rating: ${data.rating || "Brak oceny"}<br>
             `;
-           
             if (isLoggedIn) {
                 popupContent += `
-                    <button onclick="editMushroom(${data.id})" class="popupEdit">Edit</button>
-                    <button onclick="deleteMushroom(${data.id})" class="popupDelete">Delete</button>
+                    <button onclick="editMushroom(${data.id})" class="popupEdit">Edytuj</button>
+                    <button onclick="deleteMushroom(${data.id})" class="popupDelete">Usuń</button>
                     <button onclick="joinDiscussion(${data.latitude}, ${data.longitude})">Dołącz do dyskusji</button>
-
                 `;
             }
-
             marker.bindPopup(popupContent);
         };
+
         function joinDiscussion(latitude, longitude) {
             const roomUrl = `/chat/${latitude}/${longitude}`;
-            window.location.href = roomUrl;  
+            window.location.href = roomUrl;
         }
+
+        const brokerUrl = 'wss://test.mosquitto.org:8081'; 
+        const mqttTopic = '/mushroompoints';
+
+        const client = mqtt.connect(brokerUrl);
+
+        client.on('connect', () => {
+            console.log('Połączono z brokerem MQTT');
+            client.subscribe(mqttTopic, (err) => {
+                if (!err) {
+                    console.log(`Zasubskrybowano temat ${mqttTopic}`);
+                }
+            });
+        });
+
+        client.on('message', (topic, message) => {
+            if (topic === mqttTopic) {
+                const mushroomData = JSON.parse(message.toString());
+                addMarker(mushroomData);
+            }
+        });
 
         const loadMushrooms = async () => {
             try {
                 const response = await fetch(apiGetUrl);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    throw new Error(`Błąd HTTP! Status: ${response.status}`);
                 }
                 const mushroomPoints = await response.json();
                 mushroomPoints.forEach(addMarker);
             } catch (error) {
-                console.error("Error loading mushroom points:", error);
-                alert("Failed to load mushroom points.");
+                console.error("Błąd podczas ładowania punktów grzybowych:", error);
+                alert("Nie udało się załadować punktów grzybowych.");
             }
         };
 
         loadMushrooms();
 
-        document.getElementById('add-mushroompoint').addEventListener('click', async () => {
+        document.getElementById('add-mushroompoint').addEventListener('click', () => {
             const name = document.getElementById('name').value;
             const description = document.getElementById('description').value;
             const rating = document.getElementById('rating').value;
 
             if (!name || !description) {
-                alert("Name and description are required!");
+                alert("Nazwa i opis są wymagane!");
                 return;
             }
 
-            alert("Click on the map to select mushroom location.");
-            
+            alert("Kliknij na mapie, aby wybrać lokalizację grzyba.");
+
             let clickTimeout = setTimeout(() => {
-                alert("You took too long! Try again.");
+                alert("Za długo czekasz! Spróbuj ponownie.");
             }, 10000);
 
             map.once('click', async (e) => {
@@ -218,24 +234,27 @@
                 };
 
                 try {
+                    const payload = JSON.stringify(newMushroom);
+                    client.publish(mqttTopic, payload);
+
                     const response = await fetch('/mushroompoints', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(newMushroom)
                     });
 
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    if (!response.ok) throw new Error(`Błąd HTTP! Status: ${response.status}`);
 
-                    alert("Mushroom added!");
+                    alert("Grzyb dodany!");
                     loadMushrooms();
+                    resetForm()
                 } catch (error) {
-                    console.error("Failed to add mushroom:", error);
-                    alert("Failed to add mushroom.");
+                    console.error("Nie udało się dodać grzyba:", error);
+                    alert("Nie udało się dodać grzyba.");
                 }
             });
         });
 
-        // Edit Mushroom Functionality
         let currentEditId = null;
         function editMushroom(id) {
             fetch(`/mushroompoints/${id}`)
@@ -248,7 +267,6 @@
 
                     document.getElementById('add-mushroompoint').style.display = 'none';
                     document.getElementById('edit-mushroompoint').style.display = 'inline';
-                    document.getElementById('delete-mushroompoint').style.display = 'inline';
                 });
         }
 
@@ -258,7 +276,7 @@
             const rating = document.getElementById('rating').value;
 
             if (!name || !description) {
-                alert("Name and description are required!");
+                alert("Nazwa i opis są wymagane!");
                 return;
             }
 
@@ -271,35 +289,33 @@
                     body: JSON.stringify(updatedMushroom)
                 });
 
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!response.ok) throw new Error(`Błąd HTTP! Status: ${response.status}`);
 
-                alert("Mushroom updated!");
+                alert("Grzyb zaktualizowany!");
                 loadMushrooms();
                 resetForm();
             } catch (error) {
-                console.error("Failed to update mushroom:", error);
-                alert("Failed to update mushroom.");
+                console.error("Nie udało się zaktualizować grzyba:", error);
+                alert("Nie udało się zaktualizować grzyba.");
             }
         });
 
-        // Delete Mushroom Functionality
         function deleteMushroom(id) {
-            if (confirm("Are you sure you want to delete this mushroom?")) {
+            if (confirm("Czy na pewno chcesz usunąć tego grzyba?")) {
                 fetch(`/mushroompoints/${id}`, {
                     method: 'DELETE'
                 })
                 .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                    alert("Mushroom deleted!");
+                    if (!response.ok) throw new Error(`Błąd HTTP! Status: ${response.status}`);
+                    alert("Grzyb usunięty!");
                     loadMushrooms();
                 })
                 .catch(error => {
-                    console.error("Failed to delete mushroom:", error);
-                    alert("Failed to delete mushroom.");
+                    console.error("Nie udało się usunąć grzyba:", error);
+                    alert("Nie udało się usunąć grzyba.");
                 });
             }
         }
-
 
         function resetForm() {
             document.getElementById('name').value = '';
@@ -309,7 +325,6 @@
 
             document.getElementById('add-mushroompoint').style.display = 'inline';
             document.getElementById('edit-mushroompoint').style.display = 'none';
-            document.getElementById('delete-mushroompoint').style.display = 'none';
         }
     </script>
 </body>

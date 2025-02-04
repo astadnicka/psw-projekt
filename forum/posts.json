@@ -14,6 +14,16 @@
                 "content": "tfftgh",
                 "id": 3,
                 "author": "user1"
+            },
+            {
+                "content": "g",
+                "id": 4,
+                "author": "user2"
+            },
+            {
+                "content": "g",
+                "id": 5,
+                "author": "user2"
             }
         ]
     },
@@ -61,5 +71,11 @@
         "content": "d",
         "id": 7,
         "author": "user6"
+    },
+    {
+        "title": "d",
+        "content": "d",
+        "id": 8,
+        "author": "user1"
     }
 ]
