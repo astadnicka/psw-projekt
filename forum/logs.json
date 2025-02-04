@@ -1,14 +1,46 @@
 [
     {
-        "timestamp": "2025-02-04T22:16:31.127768",
+        "timestamp": "2025-02-04T23:10:59.405908",
         "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:16:31] \"\u001b[36mGET /static/header.jpeg HTTP/1.1\u001b[0m\" 304 -",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:10:59] \"\u001b[36mGET /static/header.jpeg HTTP/1.1\u001b[0m\" 304 -",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-04T22:16:31.143266",
+        "timestamp": "2025-02-04T23:10:59.412973",
+        "level": "INFO",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:10:59] \"GET /api/posts HTTP/1.1\" 200 -",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    },
+    {
+        "timestamp": "2025-02-04T23:11:05.789029",
+        "level": "INFO",
+        "message": "Request to /post",
+        "method": "POST",
+        "endpoint": "/post",
+        "ip": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-02-04T23:11:05.791387",
+        "level": "INFO",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:11:05] \"\u001b[35m\u001b[1mPOST /post HTTP/1.1\u001b[0m\" 201 -",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    },
+    {
+        "timestamp": "2025-02-04T23:11:05.792482",
+        "level": "INFO",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:11:05] \"\u001b[35m\u001b[1mPOST /post HTTP/1.1\u001b[0m\" 201 -",
+        "method": "N/A",
+        "endpoint": "N/A",
+        "ip": "N/A"
+    },
+    {
+        "timestamp": "2025-02-04T23:11:05.797736",
         "level": "INFO",
         "message": "Request to /api/posts",
         "method": "GET",
@@ -16,209 +48,41 @@
         "ip": "127.0.0.1"
     },
     {
-        "timestamp": "2025-02-04T22:16:31.145868",
+        "timestamp": "2025-02-04T23:11:05.799780",
         "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:16:31] \"GET /api/posts HTTP/1.1\" 200 -",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:11:05] \"GET /api/posts HTTP/1.1\" 200 -",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-04T22:16:31.147012",
+        "timestamp": "2025-02-04T23:11:05.801501",
         "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:16:31] \"GET /api/posts HTTP/1.1\" 200 -",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:11:05] \"GET /api/posts HTTP/1.1\" 200 -",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-04T22:16:43.379930",
+        "timestamp": "2025-02-04T23:11:10.909307",
         "level": "INFO",
-        "message": "Request to /post_details/1",
+        "message": "Request to /post/4",
         "method": "GET",
-        "endpoint": "/post_details/1",
+        "endpoint": "/post/4",
         "ip": "127.0.0.1"
     },
     {
-        "timestamp": "2025-02-04T22:16:43.386493",
+        "timestamp": "2025-02-04T23:11:10.910797",
         "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:16:43] \"GET /post_details/1 HTTP/1.1\" 200 -",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:11:10] \"GET /post/4 HTTP/1.1\" 200 -",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"
     },
     {
-        "timestamp": "2025-02-04T22:16:43.387382",
+        "timestamp": "2025-02-04T23:11:10.912007",
         "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:16:43] \"GET /post_details/1 HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:16:43.428661",
-        "level": "INFO",
-        "message": "Request to /post/1/comments",
-        "method": "GET",
-        "endpoint": "/post/1/comments",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-04T22:16:43.430472",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:16:43] \"GET /post/1/comments HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:16:43.431804",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:16:43] \"GET /post/1/comments HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:17:47.290725",
-        "level": "INFO",
-        "message": "Request to /post_details/1",
-        "method": "GET",
-        "endpoint": "/post_details/1",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-04T22:17:47.296784",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:17:47] \"GET /post_details/1 HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:17:47.297528",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:17:47] \"GET /post_details/1 HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:17:47.317964",
-        "level": "INFO",
-        "message": "Request to /post/1/comments",
-        "method": "GET",
-        "endpoint": "/post/1/comments",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-04T22:17:47.320466",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:17:47] \"GET /post/1/comments HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:17:47.322083",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:17:47] \"GET /post/1/comments HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:19:20.010697",
-        "level": "INFO",
-        "message": "Request to /post_details/1",
-        "method": "GET",
-        "endpoint": "/post_details/1",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-04T22:19:20.016679",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:19:20] \"GET /post_details/1 HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:19:20.017868",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:19:20] \"GET /post_details/1 HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:19:20.057948",
-        "level": "INFO",
-        "message": "Request to /post/1/comments",
-        "method": "GET",
-        "endpoint": "/post/1/comments",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-04T22:19:20.060647",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:19:20] \"GET /post/1/comments HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:19:20.062627",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:19:20] \"GET /post/1/comments HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:21:26.743043",
-        "level": "INFO",
-        "message": "Request to /post_details/1",
-        "method": "GET",
-        "endpoint": "/post_details/1",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-04T22:21:26.749685",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:21:26] \"GET /post_details/1 HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:21:26.750973",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:21:26] \"GET /post_details/1 HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:21:26.779541",
-        "level": "INFO",
-        "message": "Request to /post/1/comments",
-        "method": "GET",
-        "endpoint": "/post/1/comments",
-        "ip": "127.0.0.1"
-    },
-    {
-        "timestamp": "2025-02-04T22:21:26.782451",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:21:26] \"GET /post/1/comments HTTP/1.1\" 200 -",
-        "method": "N/A",
-        "endpoint": "N/A",
-        "ip": "N/A"
-    },
-    {
-        "timestamp": "2025-02-04T22:21:26.784962",
-        "level": "INFO",
-        "message": "127.0.0.1 - - [04/Feb/2025 22:21:26] \"GET /post/1/comments HTTP/1.1\" 200 -",
+        "message": "127.0.0.1 - - [04/Feb/2025 23:11:10] \"GET /post/4 HTTP/1.1\" 200 -",
         "method": "N/A",
         "endpoint": "N/A",
         "ip": "N/A"

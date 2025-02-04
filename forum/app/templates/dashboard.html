@@ -4,36 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <style>
+        body {
+            background-image: url('/static/bg.jpg');
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            color: #6b4e31; /* Brązowy kolor tekstu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        nav {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #6b4e31;
+            font-size: 18px;
+            padding: 8px 15px;
+            border: 2px solid #6b4e31;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            margin-top: 40px;
+        }
+
+        nav ul li a:hover {
+            background-color: #6b4e31;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 10px;
+            color: #6b4e31; /* Brązowy kolor dla powitania */
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #6b4e31;
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #6b4e31;
+            font-weight: bold;
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            border: 2px solid #6b4e31;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        a:hover {
+            background-color: #6b4e31;
+            color: white;
+        }
+
+    </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('main.dashboard')}}">Dashboard</a></li>
-            <li><a href="{{ url_for('main.mushroomatlas')}}">Atlas Grzybów</a></li>
-            <li><a href="{{ url_for('main.map')}}">Mapa Grzybów</a></li>
-            <li><a href="{{ url_for('main.posts_page') }}">Posty</a></li>
 
-        </ul>
-        
-    </nav>
-    <h1>Welcome to MyShroom</h1>
+    <div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.dashboard')}}">Dashboard</a></li>
+                <li><a href="{{ url_for('main.mushroomatlas')}}">Atlas Grzybów</a></li>
+                <li><a href="{{ url_for('main.map')}}">Mapa Grzybów</a></li>
+                <li><a href="{{ url_for('main.posts_page') }}">Posty</a></li>
+            </ul>
+        </nav>
 
-    <h2 id="welcomeMessage"></h2>
-    <p id="statusMessage"></p>
+        <h1>Welcome to MyShroom</h1>
 
-    <a href="{{ url_for('main.logout') }}">Log out</a>
+        <h2 id="welcomeMessage"></h2>
+        <p id="statusMessage"></p>
+
+        <a href="{{ url_for('main.logout') }}">Log out</a>
+    </div>
 
     <script>
         const isLoggedIn = '{{ session.get("username") }}' !== '';
         const isAdmin = JSON.parse('{{ session.get("isAdmin", False) | tojson }}');
-           
         
         window.onload = function() {
             if (isLoggedIn) {
                 document.getElementById('welcomeMessage').innerHTML = `Welcome, {{ username }}!`;
                 document.getElementById('statusMessage').innerHTML = 'You are logged in as a registered user.';
                 if (isAdmin) {
-                    console.log(isAdmin)
                     document.getElementById('welcomeMessage').innerHTML = `Welcome, Admin!`;
                     document.getElementById('statusMessage').innerHTML = 'You have admin privileges.';
                 } 
@@ -43,6 +126,6 @@
             }
         }
     </script>
-</body>
 
+</body>
 </html>

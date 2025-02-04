@@ -9,6 +9,11 @@
                 "content": "Super!!!\n",
                 "id": 1,
                 "author": "user1"
+            },
+            {
+                "content": "Yay!!!",
+                "id": 2,
+                "author": "user2"
             }
         ]
     },
@@ -24,5 +29,11 @@
         "content": "d",
         "id": 3,
         "author": "user1"
+    },
+    {
+        "title": "test",
+        "content": "2",
+        "id": 4,
+        "author": "user2"
     }
 ]

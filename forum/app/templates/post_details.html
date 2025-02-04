@@ -5,70 +5,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post z komentarzami</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+        html{
+            box-shadow: inset 0 0 100px 10px #684623, inset 0 0 100px 100in rgba(104, 70, 35, 0.2);
+            height: 100vw;
 
-        .post {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 20px 0;
         }
+    body {
+        background: #f6d6b5;
+        background-image: url('https://www.transparenttextures.com/patterns/old-map.png');
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
 
-        .comment {
-            border: 1px solid #e1e1e1;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #f9f9f9;
-        }
+    .container {
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        margin: 0 auto;
+    }
 
-        .comment button {
-            margin-left: 10px;
-            padding: 5px;
-        }
+    .post {
+        margin: 20px 0 30px;
+        border: 1px solid #c09976;
+        padding: 15px;
+        background-color: #f4d6b1;
+        border-radius: 5px;
+        box-shadow: inset 0 0 3px 2px #caa97a, inset 0 0 10px 3px #f4d6b1, inset 0 0 70px 50px #e2bf8e, 0 0 5px 5px rgba(148, 114, 86, 0.168);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    h2 {
+        text-align: center;
+    }
 
-        #add-comment-form textarea {
-            width: 100%;
-            padding: 10px;
-        }
+    /* Formularz dodawania komentarza */
+    #add-comment-form {
+        background-color: #f4d6b1; /* Jasno-brązowe tło formularza */
+        border: 1px solid #c09976; /* Obramowanie formularza */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(104, 70, 35, 0.2);
+        margin: 20px 0;
+        width: 100%;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: inset 0 0 3px 2px #caa97a, inset 0 0 10px 3px #f4d6b1, inset 0 0 70px 50px #e2bf8e, 0 0 5px 5px rgba(148, 114, 86, 0.168);
+    
+    }
 
-        #add-comment-form button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            
-        }
+    #add-comment-form textarea {
+        background-color: #f4e5d1; /* Jasno-beżowe tło pola tekstowego */
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 1px solid #9e7d5f;
+        border-radius: 5px;
+        font-size: 16px;
+        resize: vertical;
+        margin-bottom: 10px;
+        box-shadow: inset 0 0 10px 2px rgba(209, 155, 108, 0.767);
+    }
 
-        #add-comment-form button:hover {
-            background-color: #45a049;
-        }
+    button {
+        background-color: #6b4e31; /* Brązowy kolor przycisku */
+        color: rgb(188, 153, 135);
+        border: none;
+        padding: 12px 24px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    #add-comment-form button:hover {
+        background-color: #4b3621; /* Ciemniejszy brąz przy hover */
+    }
+
+    /* Tekst dla niezalogowanych */
+    p {
+        text-align: center;
+    }
+    #a{
+        width: 100px;
+    }
+
+    /* Ogólne stylowanie komentarzy */
+    .comment {
+        margin: 10px 0;
+        padding: 10px;
+        background-image: url('/static/etiq.png');
+        background-size: cover;
+        width: 500px;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        justify-items: center;
+        margin: 0 auto;
+        filter:drop-shadow(0 0 5px rgb(145, 97, 63))
+    }
+
+    .comment-text {
+        text-align: center; 
+        line-height: 20px;
+        font-size: 20px; 
+        margin: 30px 0 3px; 
+    }
+
+    .buttons, button {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+    }
+
     </style>
 </head>
 <body>
 
-    <!-- Post -->
-    <div class="post">
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
-        <p><strong>Autor:</strong> {{ post.author }}</p>
-    </div>
+    <div class="container">
+        <!-- Post -->
+        <div class="post">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+            <p><strong>Autor:</strong> {{ post.author }}</p>
+        </div>
 
-    {% if session["username"] %}
-        <h4>Dodaj komentarz</h4>
-        <form id="add-comment-form">
-            <textarea id="comment-content" placeholder="Treść komentarza" rows="5" cols="50" required></textarea><br><br>
-            <button type="submit">Dodaj Komentarz</button>
-        </form>
-    {% else %}
-        <p>Aby dodać komentarz, musisz być zalogowany.</p>
-    {% endif %}
+        {% if session["username"] %}
+            <h4>Dodaj komentarz</h4>
+            <form id="add-comment-form">
+                <textarea id="comment-content" placeholder="Treść komentarza" rows="5" required></textarea><br><br>
+                <button type="submit">Dodaj Komentarz</button>
+            </form>
+        {% else %}
+            <p>Aby dodać komentarz, musisz być zalogowany.</p>
+        {% endif %}
 
-
-    <h4>Komentarze</h4>
-    <div id="comment-list">
+        <h4>Komentarze</h4>
+        <div id="comment-list"></div>
     </div>
 
     <script>
@@ -85,23 +163,24 @@
 
                         let buttons = "";
                         if (comment.author === '{{ session["username"] }}') {
-                            buttons += `<button onclick="editComment(${comment.id})">Edytuj</button>`;
-                            buttons += `<button onclick="deleteComment(${comment.id})">Usuń</button>`;
+                            buttons += `<button id="a" onclick="editComment(${comment.id})">Edytuj</button>`;
+                            buttons += `<button id="a" onclick="deleteComment(${comment.id})">Usuń</button>`;
                         } else if (JSON.parse('{{ session.get("isAdmin", False) | tojson }}')) {
                             buttons += `<button onclick="deleteComment(${comment.id})">Usuń</button>`;
                         }
 
                         commentDiv.innerHTML = `
-                            <p class="comment-text">${comment.content}</p> <!-- Klasa dla treści komentarza -->
+                            <p class="comment-text">${comment.content}</p>
                             <p><small>Autor: ${comment.author}</small></p>
-                            ${buttons}
+                            <div class="buttons">
+                                ${buttons}
+                            </div>
                         `;
                         commentList.appendChild(commentDiv);
                     });
                 })
                 .catch(error => console.error('Błąd podczas pobierania komentarzy:', error));
         }
-
 
         function editComment(commentId) {
             const commentElement = document.getElementById(`comment-${commentId}`);
@@ -145,8 +224,6 @@
             commentTextElement.innerHTML = originalText; 
         }
 
-
-
         function deleteComment(commentId) {
             if (confirm("Czy na pewno chcesz usunąć ten komentarz?")) {
                 fetch(`/post/${window.postId}/comment/${commentId}`, { method: 'DELETE' })
@@ -189,7 +266,6 @@
                 });
             }
         });
-
     </script>
 
 </body>
